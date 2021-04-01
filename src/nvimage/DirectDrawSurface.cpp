@@ -1495,7 +1495,7 @@ static bool readLinearImage(Image * img, uint8 * data, uint bitcount, uint rmask
 }
 
 
-static void readBlock(ColorBlock * rgba, uint8 * data, uint dxgiFormat, bool isNormalMap, bool swapRA)
+static uint8* readBlock(ColorBlock * rgba, uint8* data, uint dxgiFormat, bool isNormalMap, bool swapRA)
 {
     nvDebugCheck(rgba != NULL);
     nvDebugCheck(data != NULL);
@@ -1504,16 +1504,19 @@ static void readBlock(ColorBlock * rgba, uint8 * data, uint dxgiFormat, bool isN
     {
         BlockDXT1 * block = (BlockDXT1 *)data;
         block->decodeBlock(rgba);
+        data += sizeof(BlockDXT3);
     }
     else if (dxgiFormat == DXGI_FORMAT_BC2_UNORM)
     {
         BlockDXT3 * block = (BlockDXT3 *)data;
         block->decodeBlock(rgba);
+        data += sizeof(BlockDXT3);
     }
     else if (dxgiFormat == DXGI_FORMAT_BC3_UNORM)
     {
         BlockDXT5 * block = (BlockDXT5 *)data;
         block->decodeBlock(rgba);
+        data += sizeof(BlockDXT5);
 
         if (swapRA) {
             // Swap R & A.
@@ -1530,17 +1533,20 @@ static void readBlock(ColorBlock * rgba, uint8 * data, uint dxgiFormat, bool isN
     {
         BlockATI1 * block = (BlockATI1 *)data;
         block->decodeBlock(rgba);
+        data += sizeof(BlockATI1);
     }
     else if (DXGI_FORMAT_BC5_UNORM)
     {
         BlockATI2 * block = (BlockATI2 *)data;
         block->decodeBlock(rgba);
+        data += sizeof(BlockATI2);
     }
     else if (dxgiFormat == DXGI_FORMAT_BC6H_UF16)
     {
         BlockBC6 * block = (BlockBC6 *)data;
         Vector4 colors[16];
         block->decodeBlock(colors);
+        data += sizeof(BlockBC6);
 
         // Clamp to [0, 1] and round to 8-bit
         for (int y = 0; y < 4; ++y)
@@ -1560,6 +1566,7 @@ static void readBlock(ColorBlock * rgba, uint8 * data, uint dxgiFormat, bool isN
     {
         BlockBC7 * block = (BlockBC7 *)data;
         block->decodeBlock(rgba);
+        data += sizeof(BlockBC7);
     }
     else
     {
@@ -1580,6 +1587,8 @@ static void readBlock(ColorBlock * rgba, uint8 * data, uint dxgiFormat, bool isN
             c.b = clamp(int(255.0f * (nz + 1) / 2.0f), 0, 255);
         }
     }
+
+    return data;
 }
 
 
@@ -1644,7 +1653,7 @@ static bool readBlockImage(Image * img, uint8 * data, uint dxgiFormat, bool isNo
                 ColorBlock block;
 
                 // Read color block.
-                readBlock(&block, data, dxgiFormat, isNormalMap, swapRA);
+                data = readBlock(&block, data, dxgiFormat, isNormalMap, swapRA);
 
                 // Write color block.
                 for (uint y = 0; y < min(4U, h - 4 * by); y++)
