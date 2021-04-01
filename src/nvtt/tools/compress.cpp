@@ -291,6 +291,22 @@ int main(int argc, char *argv[])
         {
             format = nvtt::Format_ETC1;
         }
+        else if (strcmp("-pvr_2rgb", argv[i]) == 0)
+        {
+            format = nvtt::Format_PVR_2BPP_RGB;
+        }
+        else if (strcmp("-pvr_2rgba", argv[i]) == 0)
+        {
+            format = nvtt::Format_PVR_2BPP_RGBA;
+        }
+        else if (strcmp("-pvr_4rgb", argv[i]) == 0)
+        {
+            format = nvtt::Format_PVR_2BPP_RGB;
+        }
+        else if (strcmp("-pvr_4rgba", argv[i]) == 0)
+        {
+            format = nvtt::Format_PVR_2BPP_RGBA;
+        }
         else if (strcmp("-etc2", argv[i]) == 0 || strcmp("-etc2_rgb", argv[i]) == 0)
         {
             format = nvtt::Format_ETC2_RGB;
@@ -418,8 +434,12 @@ int main(int argc, char *argv[])
         printf("  -bc4          BC4 format (ATI1)\n");
         printf("  -bc5          BC5 format (3Dc/ATI2)\n");
         printf("  -bc6          BC6 format\n");
-        printf("  -bc7          BC7 format\n\n");
-        printf("  -bc3_rgbm     BC3-rgbm format\n\n");
+        printf("  -bc7          BC7 format\n");
+        printf("  -bc3_rgbm     BC3-rgbm format\n");
+        printf("  -pvr_2rgb     PVR_2BPP_RGB format\n");
+        printf("  -pvr_2rgba    PVR_2BPP_RGBA format\n");
+        printf("  -pvr_4rgb     PVR_4BPP_RGB format\n");
+        printf("  -pvr_4rgba    PVR_4BPP_RGBA format\n\n");
 
         printf("Output options:\n");
         printf("  -silent  \tDo not output progress messages\n");
