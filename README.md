@@ -1,3 +1,13 @@
+# This is a Fork of NVTT to support the TeximpNet library
+
+Since NVTT is now in archive mode, this repository will be used for fixes or other feature enhancements as required by [TeximpNet](https://bitbucket.org/Starnick/teximpnet/src/master/).
+
+Builds, which are published in the TeximpNet NuGet package, can be downloaded from Azure DevOps.
+
+[![Build Status](https://dev.azure.com/nicholaswoodfield/OSS-Libraries/_apis/build/status/github/starnick/nvidia-texture-tools?branchName=master)](https://dev.azure.com/nicholaswoodfield/OSS-Libraries/_build/latest?definitionId=1&branchName=master)
+
+----
+
 # NVTT is discontinued
 
 After more than 14 years maintaining and updating this library on my spare time, I've decided to officially discontinue it and focus my energy on other projects.
