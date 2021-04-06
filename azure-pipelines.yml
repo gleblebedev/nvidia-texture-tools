@@ -1,0 +1,73 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- master
+
+jobs:
+- job: Linux
+  pool:
+    vmImage: 'ubuntu-latest'
+  steps:
+  - script: ./configure --release
+    displayName: Configure Make Project
+  - script: make
+    displayName: Build Make Project
+  - task: PublishBuildArtifacts@1
+    displayName: Publish linux-x64 Artifacts
+    inputs:
+      PathtoPublish: 'build-release/src/nvtt/libnvtt.so'
+      ArtifactName: 'linux-x64'
+      publishLocation: 'Container'
+- job: macOS
+  pool:
+    vmImage: 'macOS-latest'
+  steps:
+  - script: ./configure --release
+    displayName: Configure Make Project
+  - script: make
+    displayName: Build Make Project
+  - task: PublishBuildArtifacts@1
+    displayName: Publish osx-x64 Artifacts
+    inputs:
+      PathtoPublish: 'build-release/src/nvtt/libnvtt.dylib'
+      ArtifactName: 'osx-x64'
+      publishLocation: 'Container'
+- job: Windows
+  pool:
+    vmImage: 'vs2017-win2016'
+  steps:
+  - task: VSBuild@1
+    displayName: Build VS Project
+    inputs:
+      solution: 'project/vs2017-teximpnet/nvtt.sln'
+      vsVersion: '15.0'
+      platform: 'x64'
+      configuration: 'Release'
+      maximumCpuCount: true
+      msbuildArchitecture: 'x64'
+  - task: PublishBuildArtifacts@1
+    displayName: Publish win-x64 Artifacts
+    inputs:
+      PathtoPublish: 'project/vs2017-teximpnet/Release.x64/'
+      ArtifactName: 'win-x64'
+      publishLocation: 'Container'
+  - task: VSBuild@1
+    displayName: Build VS Project
+    inputs:
+      solution: 'project/vs2017-teximpnet/nvtt.sln'
+      vsVersion: '15.0'
+      platform: 'Win32'
+      configuration: 'Release'
+      maximumCpuCount: true
+      msbuildArchitecture: 'x86'
+      
+  - task: PublishBuildArtifacts@1
+    displayName: Publish win-x86 Artifacts
+    inputs:
+      PathtoPublish: 'project/vs2017-teximpnet/Release.Win32/'
+      ArtifactName: 'win-x86'
+      publishLocation: 'Container'
+  
