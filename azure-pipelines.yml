@@ -42,7 +42,7 @@ jobs:
   - task: VSBuild@1
     displayName: Build VS Project
     inputs:
-      solution: 'project/vs2017-teximpnet/nvtt.sln'
+      solution: 'project/vc2017/nvtt.sln'
       vsVersion: '15.0'
       platform: 'x64'
       configuration: 'Release'
@@ -51,13 +51,13 @@ jobs:
   - task: PublishBuildArtifacts@1
     displayName: Publish win-x64 Artifacts
     inputs:
-      PathtoPublish: 'project/vs2017-teximpnet/Release.x64/'
+      PathtoPublish: 'project/vc2017/Release.x64/'
       ArtifactName: 'win-x64'
       publishLocation: 'Container'
   - task: VSBuild@1
     displayName: Build VS Project
     inputs:
-      solution: 'project/vs2017-teximpnet/nvtt.sln'
+      solution: 'project/vc2017/nvtt.sln'
       vsVersion: '15.0'
       platform: 'Win32'
       configuration: 'Release'
@@ -67,7 +67,7 @@ jobs:
   - task: PublishBuildArtifacts@1
     displayName: Publish win-x86 Artifacts
     inputs:
-      PathtoPublish: 'project/vs2017-teximpnet/Release.Win32/'
+      PathtoPublish: 'project/vc2017/Release.Win32/'
       ArtifactName: 'win-x86'
       publishLocation: 'Container'
   
