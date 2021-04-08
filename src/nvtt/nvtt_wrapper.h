@@ -207,6 +207,8 @@ typedef void (* nvttErrorHandler)(NvttError e);
 typedef void (* nvttBeginImageHandler)(int size, int width, int height, int depth, int face, int miplevel);
 typedef bool (* nvttOutputHandler)(const void * data, int size);
 typedef void (* nvttEndImageHandler)();
+typedef void (* nvttTask)(void* context, int id);
+typedef void (* nvttTaskDispatch)(nvttTask* task, void * context, int count);
 
 
 // InputOptions class.
@@ -263,7 +265,9 @@ NVTT_API void nvttEnableCudaAcceleration(NvttCompressor * compressor, NvttBoolea
 NVTT_API NvttBoolean nvttIsCudaAccelerationEnabled(const NvttCompressor* compressor);
 NVTT_API NvttBoolean nvttCompress(const NvttCompressor * compressor, const NvttInputOptions * inputOptions, const NvttCompressionOptions * compressionOptions, const NvttOutputOptions * outputOptions);
 NVTT_API int nvttEstimateSize(const NvttCompressor * compressor, const NvttInputOptions * inputOptions, const NvttCompressionOptions * compressionOptions);
-
+NVTT_API void nvttSetTaskDispatcher(NvttCompressor * compressor, nvttTaskDispatch dispatcher);
+NVTT_API void nvttEnableConcurrentTaskDispatcher(NvttCompressor * compressor, NvttBoolean enabled);
+NVTT_API NvttBoolean nvttIsConcurrentTaskDispatcherEnabled(NvttCompressor * compressor);
 
 // Global functions.
 NVTT_API const char * nvttErrorString(NvttError e);

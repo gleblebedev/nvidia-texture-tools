@@ -63,11 +63,13 @@ Compressor::Compressor() : m(*new Compressor::Private())
     // CUDA initialization.
     m.cudaSupported = cuda::isHardwarePresent();
     m.cudaEnabled = false;
+    m.useConcurrentDispatcher = true;
+    m.customDispatcherSet = false;
     m.cuda = NULL;
 
     enableCudaAcceleration(m.cudaSupported);
 
-    m.dispatcher = &m.defaultDispatcher;
+    m.dispatcher = m.getDefaultDispatcher();
 
     icbc::init_dxt1();
 }
@@ -102,16 +104,33 @@ bool Compressor::isCudaAccelerationEnabled() const
     return m.cudaEnabled;
 }
 
-void Compressor::setTaskDispatcher(TaskDispatcher * disp)
+
+TaskDispatcher* Compressor::setTaskDispatcher(TaskDispatcher * disp)
 {
+    TaskDispatcher* dispatcherToReturn = (m.customDispatcherSet) ? m.dispatcher : NULL;
+
     if (disp == NULL) {
-        m.dispatcher = &m.defaultDispatcher;
+        m.dispatcher = m.getDefaultDispatcher();
+        m.customDispatcherSet = false;
     }
     else {
         m.dispatcher = disp;
+        m.customDispatcherSet = true;
     }
+
+    return dispatcherToReturn;
 }
 
+void Compressor::enableConcurrentTaskDispatcher(bool enable) {
+    m.useConcurrentDispatcher = enable;
+
+    if (!m.customDispatcherSet)
+        m.dispatcher = m.getDefaultDispatcher();
+}
+
+bool Compressor::isConcurrentTaskDispatcherEnabled() const {
+    return m.useConcurrentDispatcher;
+}
 
 // Input Options API.
 bool Compressor::process(const InputOptions & inputOptions, const CompressionOptions & compressionOptions, const OutputOptions & outputOptions) const
@@ -212,7 +231,12 @@ int Compressor::estimateSize(int w, int h, int d, int mipmapCount, const Compres
 
 
 
-
+TaskDispatcher* Compressor::Private::getDefaultDispatcher() const {
+    if (useConcurrentDispatcher)
+        return (TaskDispatcher*) &defaultConcurrentDispatcher;
+    else
+        return (TaskDispatcher*) &defaultSequentialDispatcher;
+}
 
 bool Compressor::Private::compress(const InputOptions::Private & inputOptions, const CompressionOptions::Private & compressionOptions, const OutputOptions::Private & outputOptions) const
 {

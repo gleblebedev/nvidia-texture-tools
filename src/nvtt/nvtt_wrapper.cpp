@@ -26,6 +26,7 @@
 #include "nvtt_wrapper.h"
 
 #include "OutputOptions.h"
+#include "TaskDispatcher.h"
 
 // An OutputHandler/ErrorHandler that sets and calls function pointers, rather than
 // requiring interfaces to derive from OutputHandler/ErrorHandler itself
@@ -76,6 +77,21 @@ public:
     }
 };
 
+struct TaskDispatcherWrapper : public nvtt::TaskDispatcher
+{
+private:
+    nvttTaskDispatch m_dispatch;
+
+public:
+    TaskDispatcherWrapper(nvttTaskDispatch dispatch)
+    {
+        m_dispatch = dispatch;
+    }
+
+    virtual void dispatch(nvtt::Task * task, void * context, int count) {
+        m_dispatch((nvttTask*)task, context, count);
+    }
+};
 
 // InputOptions class.
 NvttInputOptions * nvttCreateInputOptions()
@@ -297,6 +313,7 @@ NvttCompressor * nvttCreateCompressor()
 
 void nvttDestroyCompressor(NvttCompressor * compressor)
 {
+    nvttSetTaskDispatcher(compressor, NULL); // Ensure this gets cleaned up when deleting the compressor
     delete compressor;
 }
 
@@ -318,6 +335,32 @@ NvttBoolean nvttCompress(const NvttCompressor * compressor, const NvttInputOptio
 int nvttEstimateSize(const NvttCompressor * compressor, const NvttInputOptions * inputOptions, const NvttCompressionOptions * compressionOptions)
 {
     return compressor->estimateSize(*inputOptions, *compressionOptions);
+}
+
+void nvttSetTaskDispatcher(NvttCompressor * compressor, nvttTaskDispatch dispatcher) 
+{
+    nvtt::TaskDispatcher* oldDispatcher = NULL;
+    if (dispatcher == NULL)
+    { 
+        oldDispatcher = compressor->setTaskDispatcher(nullptr);
+    }
+    else
+    {
+        TaskDispatcherWrapper* dispatcherWrapper = new TaskDispatcherWrapper(dispatcher);
+        oldDispatcher = compressor->setTaskDispatcher(dispatcherWrapper);
+    }
+
+    // Ensure we delete the wrapper
+    if (oldDispatcher != NULL)
+        delete oldDispatcher;
+}
+
+void nvttEnableConcurrentTaskDispatcher(NvttCompressor * compressor, NvttBoolean enabled) {
+    compressor->enableConcurrentTaskDispatcher(enabled != NVTT_False);
+}
+
+NvttBoolean nvttIsConcurrentTaskDispatcherEnabled(NvttCompressor * compressor) {
+    return (NvttBoolean)compressor->isConcurrentTaskDispatcherEnabled();
 }
 
 
