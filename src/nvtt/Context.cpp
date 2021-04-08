@@ -834,6 +834,30 @@ bool Compressor::Private::outputHeader(nvtt::TextureType textureType, int w, int
                     header.setFourCC('C', 'T', 'X', '1');
                     if (isNormalMap) header.setNormalFlag(true);
                 }
+                else if (compressionOptions.format == Format_ETC1) {
+                    header.setFourCC('E', 'T', 'C', '1');
+                    if (isNormalMap) header.setNormalFlag(true);
+                }
+                else if (compressionOptions.format == Format_ETC2_RGB) {
+                    header.setFourCC('E', 'T', 'C', '2');
+                    if (isNormalMap) header.setNormalFlag(true);
+                }
+                else if (compressionOptions.format == Format_PVR_2BPP_RGB) {
+                    header.setFourCC('P', 'V', 'R', '0');
+                    if (isNormalMap) header.setNormalFlag(true);
+                }
+                else if (compressionOptions.format == Format_PVR_2BPP_RGBA) {
+                    header.setFourCC('P', 'V', 'R', '1');
+                    if (isNormalMap) header.setNormalFlag(true);
+                }
+                else if (compressionOptions.format == Format_PVR_4BPP_RGB) {
+                    header.setFourCC('P', 'V', 'R', '2');
+                    if (isNormalMap) header.setNormalFlag(true);
+                }
+                else if (compressionOptions.format == Format_PVR_4BPP_RGBA) {
+                    header.setFourCC('P', 'V', 'R', '3');
+                    if (isNormalMap) header.setNormalFlag(true);
+                }
                 else {
                     supported = false;
                 }
