@@ -49,7 +49,7 @@
 #  define NVTT_API
 #endif
 
-#define NVTT_VERSION 20102
+#define NVTT_VERSION 20200
 
 #define NVTT_FORBID_COPY(Class) \
     private: \
@@ -421,7 +421,11 @@ namespace nvtt
         // Context settings.
         NVTT_API void enableCudaAcceleration(bool enable);
         NVTT_API bool isCudaAccelerationEnabled() const;
-        NVTT_API void setTaskDispatcher(TaskDispatcher * disp); // (New in NVTT 2.1)
+
+        // Returns previous task dispatcher, if not the default one
+        NVTT_API TaskDispatcher* setTaskDispatcher(TaskDispatcher * disp);
+        NVTT_API void enableConcurrentTaskDispatcher(bool enable);
+        NVTT_API bool isConcurrentTaskDispatcherEnabled() const;
 
         // InputOptions API.
         NVTT_API bool process(const InputOptions & inputOptions, const CompressionOptions & compressionOptions, const OutputOptions & outputOptions) const;

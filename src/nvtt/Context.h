@@ -57,15 +57,18 @@ namespace nvtt
         nv::CompressorInterface * chooseGpuCompressor(const CompressionOptions::Private & compressionOptions) const;
 
         int estimateSize(int w, int h, int d, int mipmapCount, const CompressionOptions::Private & compressionOptions) const;
+        TaskDispatcher* getDefaultDispatcher() const;
 
         bool cudaSupported;
         bool cudaEnabled;
+        bool customDispatcherSet;
+        bool useConcurrentDispatcher;
 
         nv::AutoPtr<nv::CudaContext> cuda;
 
         TaskDispatcher * dispatcher;
-        //SequentialTaskDispatcher defaultDispatcher;
-        ConcurrentTaskDispatcher defaultDispatcher;
+        SequentialTaskDispatcher defaultSequentialDispatcher;
+        ConcurrentTaskDispatcher defaultConcurrentDispatcher;
     };
 
 } // nvtt namespace

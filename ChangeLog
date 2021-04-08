@@ -1,3 +1,6 @@
+NVIDIA Texture Tools version 2.2.0 (Unofficial Release)
+ * Exposed TaskDispatcher to C-API, callers can provide a custom dispatcher and control if the concurrent or sequential dispatcher will be used by default
+
 NVIDIA Texture Tools version 2.1.2
  * Use ICBC as the main BC1 compressor.
  * Various fixes.
