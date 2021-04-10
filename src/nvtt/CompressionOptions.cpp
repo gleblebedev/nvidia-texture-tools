@@ -263,9 +263,9 @@ unsigned int CompressionOptions::d3d9Format() const
             0,                                  // Format_ETC2_R
             0,                                  // Format_ETC2_RG
             NV_MAKEFOURCC('E', 'T', 'C', '2'),  // Format_ETC2_RGB
-            0,                                  // Format_ETC2_RGBA
+            NV_MAKEFOURCC('E', 'T', 'C', 'A'),  // Format_ETC2_RGBA
             0,                                  // Format_ETC2_RGB_A1
-            0,                                  // Format_ETC2_RGBM
+            NV_MAKEFOURCC('E', 'T', 'C', 'A'),      // Format_ETC2_RGBM
             FOURCC_PVR0,
             FOURCC_PVR1,
             FOURCC_PVR2,

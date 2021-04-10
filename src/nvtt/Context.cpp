@@ -866,6 +866,10 @@ bool Compressor::Private::outputHeader(nvtt::TextureType textureType, int w, int
                     header.setFourCC('E', 'T', 'C', '2');
                     if (isNormalMap) header.setNormalFlag(true);
                 }
+                else if (compressionOptions.format == Format_ETC2_RGBA) {
+                    header.setFourCC('E', 'T', 'C', 'A');
+                    if (isNormalMap) header.setNormalFlag(true);
+                }
                 else if (compressionOptions.format == Format_PVR_2BPP_RGB) {
                     header.setFourCC('P', 'V', 'R', '0');
                     if (isNormalMap) header.setNormalFlag(true);

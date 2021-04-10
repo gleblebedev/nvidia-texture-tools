@@ -90,7 +90,11 @@ namespace nv
         FOURCC_UVER = NV_MAKEFOURCC('U', 'V', 'E', 'R'),
         FOURCC_BC6H = NV_MAKEFOURCC('B', 'C', '6', 'H'),
         FOURCC_BC7L = NV_MAKEFOURCC('B', 'C', '7', 'L'),
-        
+
+        FOURCC_ETC1 = NV_MAKEFOURCC('E', 'T', 'C', '1'),
+        FOURCC_ETC2 = NV_MAKEFOURCC('E', 'T', 'C', '2'),
+        FOURCC_ETCA = NV_MAKEFOURCC('E', 'T', 'C', 'A'),
+
         FOURCC_PVR0 = NV_MAKEFOURCC('P', 'V', 'R', '0'),
         FOURCC_PVR1 = NV_MAKEFOURCC('P', 'V', 'R', '1'),
         FOURCC_PVR2 = NV_MAKEFOURCC('P', 'V', 'R', '2'),
@@ -242,6 +246,38 @@ namespace nv
         DXGI_FORMAT_BC7_TYPELESS = 97,
         DXGI_FORMAT_BC7_UNORM = 98,
         DXGI_FORMAT_BC7_UNORM_SRGB = 99,
+
+        DXGI_FORMAT_AYUV = 100,
+        DXGI_FORMAT_Y410 = 101,
+        DXGI_FORMAT_Y416 = 102,
+        DXGI_FORMAT_NV12 = 103,
+        DXGI_FORMAT_P010 = 104,
+        DXGI_FORMAT_P016 = 105,
+        DXGI_FORMAT_420_OPAQUE = 106,
+        DXGI_FORMAT_YUY2 = 107,
+        DXGI_FORMAT_Y210 = 108,
+        DXGI_FORMAT_Y216 = 109,
+        DXGI_FORMAT_NV11 = 110,
+        DXGI_FORMAT_AI44 = 111,
+        DXGI_FORMAT_IA44 = 112,
+        DXGI_FORMAT_P8 = 113,
+        DXGI_FORMAT_A8P8 = 114,
+        DXGI_FORMAT_B4G4R4A4_UNORM = 115,
+        DXGI_FORMAT_P208 = 116,
+        DXGI_FORMAT_V208 = 117,
+        DXGI_FORMAT_V408 = 118,
+        DXGI_FORMAT_SAMPLER_FEEDBACK_MIN_MIP_OPAQUE = 119,
+        DXGI_FORMAT_SAMPLER_FEEDBACK_MIP_REGION_USED_OPAQUE = 120,
+        DXGI_FORMAT_FORCE_UINT = 121,
+
+        //Fake format values to accomodate mobile compression algorithms
+        EXDXGI_FORMAT_ETC1 = 200,
+        EXDXGI_FORMAT_ETC2,
+        EXDXGI_FORMAT_ETC2_RGBA,
+        EXDXGI_FORMAT_PVRTC0,
+        EXDXGI_FORMAT_PVRTC1,
+        EXDXGI_FORMAT_PVRTC2,
+        EXDXGI_FORMAT_PVRTC3,
     };
 
     extern uint findD3D9Format(uint bitcount, uint rmask, uint gmask, uint bmask, uint amask);

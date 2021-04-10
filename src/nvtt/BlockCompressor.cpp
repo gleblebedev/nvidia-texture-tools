@@ -562,8 +562,8 @@ void CompressorPVR::compress(AlphaMode alphaMode, uint w, uint h, uint d, const 
             const uint bpp = 2u;
             const uint block_size = 8u * 4u;
             const uint size_factor=(block_size*bpp)>>3u;
-            const uint block_width=nv::max((w>>3u), 2u);
-            const uint block_height=nv::max((h>>2u), 2u);
+            const uint block_width=max((w>>3u), 2u);
+            const uint block_height=max((h>>2u), 2u);
             size = d * block_width * block_height * size_factor;
         }
         else {

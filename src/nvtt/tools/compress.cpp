@@ -436,6 +436,9 @@ int main(int argc, char *argv[])
         printf("  -bc6          BC6 format\n");
         printf("  -bc7          BC7 format\n");
         printf("  -bc3_rgbm     BC3-rgbm format\n");
+        printf("  -etc1         ETC1 format\n");
+        printf("  -etc2         ETC2 format\n");
+        printf("  -etc2_rgba    ETC2 RGBA format\n");
         printf("  -pvr_2rgb     PVR_2BPP_RGB format\n");
         printf("  -pvr_2rgba    PVR_2BPP_RGBA format\n");
         printf("  -pvr_4rgb     PVR_4BPP_RGB format\n");

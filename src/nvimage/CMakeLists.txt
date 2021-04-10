@@ -3,6 +3,8 @@ PROJECT(nvimage)
 SET(IMAGE_SRCS	
     nvimage.h
     BlockDXT.h BlockDXT.cpp
+    ../nvtt/CompressorETC.h ../nvtt/CompressorETC.cpp
+    BlockETC.h BlockETC.cpp
     ColorBlock.h ColorBlock.cpp
     DirectDrawSurface.h DirectDrawSurface.cpp
     ErrorMetric.h ErrorMetric.cpp
