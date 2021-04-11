@@ -932,7 +932,7 @@ uint DDSHeader::blockSize() const
     case FOURCC_DXT5:
     case FOURCC_RXGB:
     case FOURCC_ATI2:
-    case FOURCC_ETCA:
+    case FOURCC_ET2A:
         return 16;
     case FOURCC_DX10:
         switch(header10.dxgiFormat)
@@ -1066,11 +1066,9 @@ bool DirectDrawSurface::isSupported() const
                 header.pf.fourcc != FOURCC_ATI2 &&
                 header.pf.fourcc != FOURCC_ETC1 &&
                 header.pf.fourcc != FOURCC_ETC2 &&
-                header.pf.fourcc != FOURCC_ETCA &&
-                header.pf.fourcc != FOURCC_PVR0 &&
-                header.pf.fourcc != FOURCC_PVR1 &&
-                header.pf.fourcc != FOURCC_PVR2 &&
-                header.pf.fourcc != FOURCC_PVR3)
+                header.pf.fourcc != FOURCC_ET2A &&
+                header.pf.fourcc != FOURCC_PTC2 &&
+                header.pf.fourcc != FOURCC_PTC4)
             {
                 // Unknown fourcc code.
                 return false;
@@ -1592,20 +1590,19 @@ static uint8* readBlock(ColorBlock * rgba, uint8* data, uint dxgiFormat, bool is
         block->decodeBlock(rgba);
         data += sizeof(BlockEAC_ETC);
     }
-    else if (dxgiFormat == EXDXGI_FORMAT_PVRTC0)
-    {
-
-        nvDebugCheck(false);
-    }
-    else if (dxgiFormat == EXDXGI_FORMAT_PVRTC1)
+    else if (dxgiFormat == EXDXGI_FORMAT_PVRTC_2BPP_RGB)
     {
         nvDebugCheck(false);
     }
-    else if (dxgiFormat == EXDXGI_FORMAT_PVRTC2)
+    else if (dxgiFormat == EXDXGI_FORMAT_PVRTC_2BPP_RGBA)
     {
         nvDebugCheck(false);
     }
-    else if (dxgiFormat == EXDXGI_FORMAT_PVRTC3)
+    else if (dxgiFormat == EXDXGI_FORMAT_PVRTC_4BPP_RGB)
+    {
+        nvDebugCheck(false);
+    }
+    else if (dxgiFormat == EXDXGI_FORMAT_PVRTC_4BPP_RGBA)
     {
         nvDebugCheck(false);
     }
@@ -1677,10 +1674,10 @@ static bool readBlockImage(Image * img, uint8 * data, uint dxgiFormat, bool isNo
         case EXDXGI_FORMAT_ETC1:
         case EXDXGI_FORMAT_ETC2:
         case EXDXGI_FORMAT_ETC2_RGBA:
-        case EXDXGI_FORMAT_PVRTC0:
-        case EXDXGI_FORMAT_PVRTC1:
-        case EXDXGI_FORMAT_PVRTC2:
-        case EXDXGI_FORMAT_PVRTC3:
+        case EXDXGI_FORMAT_PVRTC_2BPP_RGB:
+        case EXDXGI_FORMAT_PVRTC_2BPP_RGBA:
+        case EXDXGI_FORMAT_PVRTC_4BPP_RGB:
+        case EXDXGI_FORMAT_PVRTC_4BPP_RGBA:
             break;
         default:
             return false;
@@ -1767,11 +1764,9 @@ bool nv::imageFromDDS(Image * img, DirectDrawSurface & dds, uint face, uint mipm
                 case FOURCC_RXGB: dxgiFormat = DXGI_FORMAT_BC3_UNORM; swapRA = true; break;
                 case FOURCC_ETC1: dxgiFormat = EXDXGI_FORMAT_ETC1; break;
                 case FOURCC_ETC2: dxgiFormat = EXDXGI_FORMAT_ETC2; break;
-                case FOURCC_ETCA: dxgiFormat = EXDXGI_FORMAT_ETC2_RGBA; break;
-                case FOURCC_PVR0: dxgiFormat = EXDXGI_FORMAT_PVRTC0; break;
-                case FOURCC_PVR1: dxgiFormat = EXDXGI_FORMAT_PVRTC1; break;
-                case FOURCC_PVR2: dxgiFormat = EXDXGI_FORMAT_PVRTC2; break;
-                case FOURCC_PVR3: dxgiFormat = EXDXGI_FORMAT_PVRTC3; break;
+                case FOURCC_ET2A: dxgiFormat = EXDXGI_FORMAT_ETC2_RGBA; break;
+                case FOURCC_PTC2: dxgiFormat = EXDXGI_FORMAT_PVRTC_2BPP_RGBA; break;
+                case FOURCC_PTC4: dxgiFormat = EXDXGI_FORMAT_PVRTC_4BPP_RGBA; break;
             }
         }
         if (dds.header.pf.flags & DDPF_NORMAL) isNormalMap = true;

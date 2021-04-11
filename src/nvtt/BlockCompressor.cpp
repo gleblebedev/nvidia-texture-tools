@@ -613,8 +613,8 @@ void CompressorPVR::compress(AlphaMode alphaMode, uint w, uint h, uint d, const 
         //    size = d * block_width * block_height * size_factor;
         //}
 
-        auto ptr = PVRTexLib_GetTextureDataPtr(texture, 0, 0, 0, 0);
-        auto size = PVRTexLib_GetTextureDataSize(texture, 0, 0, 0);
+        const auto ptr = PVRTexLib_GetTextureDataPtr(texture, 0, 0, 0, 0);
+        const auto size = PVRTexLib_GetTextureDataSize(texture, 0, 0, 0);
 
         if (outputOptions.outputHandler != NULL) {
             outputOptions.outputHandler->writeData(ptr, I32(size));

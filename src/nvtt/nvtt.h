@@ -117,8 +117,8 @@ namespace nvtt
         Format_ETC2_RGBM,
 
         Format_PVR_2BPP_RGB,     // Using PVR textools.
-        Format_PVR_4BPP_RGB,
         Format_PVR_2BPP_RGBA,
+        Format_PVR_4BPP_RGB,
         Format_PVR_4BPP_RGBA,
 
         Format_Count

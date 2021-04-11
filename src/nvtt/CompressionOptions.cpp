@@ -263,13 +263,13 @@ unsigned int CompressionOptions::d3d9Format() const
             0,                                  // Format_ETC2_R
             0,                                  // Format_ETC2_RG
             NV_MAKEFOURCC('E', 'T', 'C', '2'),  // Format_ETC2_RGB
-            NV_MAKEFOURCC('E', 'T', 'C', 'A'),  // Format_ETC2_RGBA
+            NV_MAKEFOURCC('E', 'T', '2', 'A'),  // Format_ETC2_RGBA
             0,                                  // Format_ETC2_RGB_A1
-            NV_MAKEFOURCC('E', 'T', 'C', 'A'),      // Format_ETC2_RGBM
-            FOURCC_PVR0,
-            FOURCC_PVR1,
-            FOURCC_PVR2,
-            FOURCC_PVR3,
+            NV_MAKEFOURCC('E', 'T', '2', 'A'),      // Format_ETC2_RGBM
+            FOURCC_PTC2,
+            FOURCC_PTC2,
+            FOURCC_PTC4,
+            FOURCC_PTC4,
         };
 
         NV_COMPILER_CHECK(NV_ARRAY_SIZE(d3d9_formats) == Format_Count);

@@ -93,12 +93,10 @@ namespace nv
 
         FOURCC_ETC1 = NV_MAKEFOURCC('E', 'T', 'C', '1'),
         FOURCC_ETC2 = NV_MAKEFOURCC('E', 'T', 'C', '2'),
-        FOURCC_ETCA = NV_MAKEFOURCC('E', 'T', 'C', 'A'),
+        FOURCC_ET2A = NV_MAKEFOURCC('E', 'T', '2', 'A'),
 
-        FOURCC_PVR0 = NV_MAKEFOURCC('P', 'V', 'R', '0'),
-        FOURCC_PVR1 = NV_MAKEFOURCC('P', 'V', 'R', '1'),
-        FOURCC_PVR2 = NV_MAKEFOURCC('P', 'V', 'R', '2'),
-        FOURCC_PVR3 = NV_MAKEFOURCC('P', 'V', 'R', '3'),
+        FOURCC_PTC2 = NV_MAKEFOURCC('P', 'T', 'C', '2'),
+        FOURCC_PTC4 = NV_MAKEFOURCC('P', 'T', 'C', '4'),
     };
 
 
@@ -274,10 +272,10 @@ namespace nv
         EXDXGI_FORMAT_ETC1 = 200,
         EXDXGI_FORMAT_ETC2,
         EXDXGI_FORMAT_ETC2_RGBA,
-        EXDXGI_FORMAT_PVRTC0,
-        EXDXGI_FORMAT_PVRTC1,
-        EXDXGI_FORMAT_PVRTC2,
-        EXDXGI_FORMAT_PVRTC3,
+        EXDXGI_FORMAT_PVRTC_2BPP_RGB,
+        EXDXGI_FORMAT_PVRTC_2BPP_RGBA,
+        EXDXGI_FORMAT_PVRTC_4BPP_RGB,
+        EXDXGI_FORMAT_PVRTC_4BPP_RGBA,
     };
 
     extern uint findD3D9Format(uint bitcount, uint rmask, uint gmask, uint bmask, uint amask);
