@@ -871,19 +871,19 @@ bool Compressor::Private::outputHeader(nvtt::TextureType textureType, int w, int
                     if (isNormalMap) header.setNormalFlag(true);
                 }
                 else if (compressionOptions.format == Format_PVR_2BPP_RGB) {
-                    header.setFourCC('P', 'V', 'R', '0');
+                    header.setFourCC('P', 'T', 'C', '2');
                     if (isNormalMap) header.setNormalFlag(true);
                 }
                 else if (compressionOptions.format == Format_PVR_2BPP_RGBA) {
-                    header.setFourCC('P', 'V', 'R', '1');
+                    header.setFourCC('P', 'T', 'C', '2');
                     if (isNormalMap) header.setNormalFlag(true);
                 }
                 else if (compressionOptions.format == Format_PVR_4BPP_RGB) {
-                    header.setFourCC('P', 'V', 'R', '2');
+                    header.setFourCC('P', 'T', 'C', '4');
                     if (isNormalMap) header.setNormalFlag(true);
                 }
                 else if (compressionOptions.format == Format_PVR_4BPP_RGBA) {
-                    header.setFourCC('P', 'V', 'R', '3');
+                    header.setFourCC('P', 'T', 'C', '4');
                     if (isNormalMap) header.setNormalFlag(true);
                 }
                 else {
@@ -1294,4 +1294,11 @@ int Compressor::Private::estimateSize(int w, int h, int d, int mipmapCount, cons
     }
 
     return size;
+}
+
+FILE _iob[] = { *stdin, *stdout, *stderr };
+
+extern "C" FILE * __cdecl __iob_func(void)
+{
+    return _iob;
 }

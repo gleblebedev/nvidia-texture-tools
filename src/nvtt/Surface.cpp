@@ -901,7 +901,7 @@ bool Surface::setImage(InputFormat format, int w, int h, int d, const void * r, 
 }
 
 #if defined(HAVE_PVRTEXTOOL)
-#include <PVRTDecompress.h>
+#include <PVRTexLib.h>
 #endif
 
 // @@ Add support for compressed 3D textures.
@@ -949,28 +949,28 @@ bool Surface::setImage2D(Format format, Decoder decoder, int w, int h, const voi
     const uint8 * ptr = (const uint8 *)data;
 
     TRY {
-#if defined(HAVE_PVRTEXTOOL)
-        if (format >= nvtt::Format_PVR_2BPP_RGB && format <= nvtt::Format_PVR_4BPP_RGBA)
-        {
-            bool two_bit_mode = (format == nvtt::Format_PVR_2BPP_RGB || format == nvtt::Format_PVR_2BPP_RGBA);
-
-            uint8 * output = new uint8[4 * w * h];
-
-            PVRTDecompressPVRTC(ptr, two_bit_mode, w, h, output);
-
-            for (int y = 0; y < h; y++) {
-                for (int x = 0; x < w; x++) {
-                    m->image->pixel(0, x, y, 0) = output[4*(y*w + x) + 0] / 255.0f;
-                    m->image->pixel(1, x, y, 0) = output[4*(y*w + x) + 1] / 255.0f;
-                    m->image->pixel(2, x, y, 0) = output[4*(y*w + x) + 2] / 255.0f;
-                    m->image->pixel(3, x, y, 0) = output[4*(y*w + x) + 3] / 255.0f;
-                }
-            }
-
-            delete [] output;
-        }
-        else
-#endif
+//#if defined(HAVE_PVRTEXTOOL)
+//        if (format >= nvtt::Format_PVR_2BPP_RGB && format <= nvtt::Format_PVR_4BPP_RGBA)
+//        {
+//            bool two_bit_mode = (format == nvtt::Format_PVR_2BPP_RGB || format == nvtt::Format_PVR_2BPP_RGBA);
+//
+//            uint8 * output = new uint8[4 * w * h];
+//
+//            PVRTDecompressPVRTC(ptr, two_bit_mode, w, h, output);
+//
+//            for (int y = 0; y < h; y++) {
+//                for (int x = 0; x < w; x++) {
+//                    m->image->pixel(0, x, y, 0) = output[4*(y*w + x) + 0] / 255.0f;
+//                    m->image->pixel(1, x, y, 0) = output[4*(y*w + x) + 1] / 255.0f;
+//                    m->image->pixel(2, x, y, 0) = output[4*(y*w + x) + 2] / 255.0f;
+//                    m->image->pixel(3, x, y, 0) = output[4*(y*w + x) + 3] / 255.0f;
+//                }
+//            }
+//
+//            delete [] output;
+//        }
+//        else
+//#endif
         if (format == nvtt::Format_BC6 || (format >= nvtt::Format_ETC1 && format <= nvtt::Format_ETC2_RGBM))
         {
             // Some formats we decode directly to float:

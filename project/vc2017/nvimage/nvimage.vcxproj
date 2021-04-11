@@ -157,6 +157,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\nvimage\BlockDXT.cpp" />
+    <ClCompile Include="..\..\..\src\nvimage\BlockETC.cpp" />
     <ClCompile Include="..\..\..\src\nvimage\ColorBlock.cpp" />
     <ClCompile Include="..\..\..\src\nvimage\DirectDrawSurface.cpp" />
     <ClCompile Include="..\..\..\src\nvimage\ErrorMetric.cpp" />
@@ -168,9 +169,11 @@
     <ClCompile Include="..\..\..\src\nvimage\ImageIO.cpp" />
     <ClCompile Include="..\..\..\src\nvimage\NormalMap.cpp" />
     <ClCompile Include="..\..\..\src\nvimage\Quantize.cpp" />
+    <ClCompile Include="..\..\..\src\nvtt\CompressorETC.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\nvimage\BlockDXT.h" />
+    <ClInclude Include="..\..\..\src\nvimage\BlockETC.h" />
     <ClInclude Include="..\..\..\src\nvimage\ColorBlock.h" />
     <ClInclude Include="..\..\..\src\nvimage\DirectDrawSurface.h" />
     <ClInclude Include="..\..\..\src\nvimage\ErrorMetric.h" />
@@ -186,6 +189,7 @@
     <ClInclude Include="..\..\..\src\nvimage\PsdFile.h" />
     <ClInclude Include="..\..\..\src\nvimage\Quantize.h" />
     <ClInclude Include="..\..\..\src\nvimage\TgaFile.h" />
+    <ClInclude Include="..\..\..\src\nvtt\CompressorETC.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

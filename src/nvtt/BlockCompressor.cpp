@@ -512,17 +512,18 @@ void EtcIntelCompressor::compress(nvtt::AlphaMode alphaMode, uint w, uint h, uin
 
 #if defined(HAVE_PVRTEXTOOL)
 
-#include <PVRTextureUtilities.h> // for CPVRTexture, CPVRTextureHeader, PixelType, Transcode
+#include <PVRTexLib.h> // for CPVRTexture, CPVRTextureHeader, PixelType, Transcode
 
 #include "nvmath/Color.inl"
 
 void CompressorPVR::compress(AlphaMode alphaMode, uint w, uint h, uint d, const float * data, TaskDispatcher * dispatcher, const CompressionOptions::Private & compressionOptions, const OutputOptions::Private & outputOptions)
 {
-    EPVRTColourSpace color_space = ePVRTCSpacelRGB;
+    //pvrtexlib::PVRTexture;
+    //EPVRTColourSpace color_space = ePVRTCSpacelRGB;
 
-    //pvrtexture::PixelType src_pixel_type = pvrtexture::PixelType('b','g','r','a',8,8,8,8);
-    pvrtexture::PixelType src_pixel_type = pvrtexture::PixelType('r','g','b',0,8,8,8,0);
-    pvrtexture::CPVRTextureHeader header(src_pixel_type.PixelTypeID, h, w, d, 1/*num mips*/, 1/*num array*/, 1/*num faces*/, color_space, ePVRTVarTypeUnsignedByteNorm);
+    ////pvrtexture::PixelType src_pixel_type = pvrtexture::PixelType('b','g','r','a',8,8,8,8);
+    //pvrtexture::PixelType src_pixel_type = pvrtexture::PixelType('r','g','b',0,8,8,8,0);
+    //pvrtexture::CPVRTextureHeader header(src_pixel_type.PixelTypeID, h, w, d, 1/*num mips*/, 1/*num array*/, 1/*num faces*/, color_space, ePVRTVarTypeUnsignedByteNorm);
 
     /*
     uint count = w * h * d;
@@ -536,48 +537,87 @@ void CompressorPVR::compress(AlphaMode alphaMode, uint w, uint h, uint d, const 
 
     uint count = w * h * d;
     Array<uint8> tmp;
-    tmp.resize(3 * count);
+    tmp.resize(4 * count);
 
     for (uint i = 0; i < count; i++) {
-        tmp[3*i+0] = data[0*count + i] * 255.0f;
-        tmp[3*i+1] = data[1*count + i] * 255.0f;
-        tmp[3*i+2] = data[2*count + i] * 255.0f;
+        tmp[4*i+0] = data[0*count + i] * 255.0f;
+        tmp[4*i+1] = data[1*count + i] * 255.0f;
+        tmp[4*i+2] = data[2*count + i] * 255.0f;
+        tmp[4 * i + 3] = data[3 * count + i] * 255.0f;
     }
 
-    pvrtexture::CPVRTexture texture(header, tmp.buffer());
+    PVRHeader_CreateParams params = PVRHeader_CreateParams();
+    params.width = w;
+    params.height = h;
+    params.depth = 1;
+    params.numMipMaps = 1;
+    params.numArrayMembers = 1;
+    params.numFaces = 1;
+    params.pixelFormat = 0x0808080861626772;// PVRTexLibPixelFormat::RGBA8888;
+    params.colourSpace = PVRTLCS_sRGB;
+    params.channelType = PVRTLVT_UnsignedByte;
+    params.preMultiplied = false;
+    PVRTexLib_PVRTextureHeader header = PVRTexLib_CreateTextureHeader(&params);
+    PVRTexLib_PVRTexture texture = PVRTexLib_CreateTexture(header, tmp.begin());
 
-    pvrtexture::PixelType dst_pixel_type = pvrtexture::PixelType(ePVRTPF_PVRTCI_2bpp_RGB);
+    //pvrtexture::CPVRTexture texture(header, tmp.buffer());
+
+    /*pvrtexture::PixelType dst_pixel_type = pvrtexture::PixelType(ePVRTPF_PVRTCI_2bpp_RGB);
 
     if (compressionOptions.format == Format_PVR_2BPP_RGB) dst_pixel_type = pvrtexture::PixelType(ePVRTPF_PVRTCI_2bpp_RGB);
     else if (compressionOptions.format == Format_PVR_4BPP_RGB) dst_pixel_type = pvrtexture::PixelType(ePVRTPF_PVRTCI_4bpp_RGB);
     else if (compressionOptions.format == Format_PVR_2BPP_RGBA) dst_pixel_type = pvrtexture::PixelType(ePVRTPF_PVRTCI_2bpp_RGBA);
-    else if (compressionOptions.format == Format_PVR_4BPP_RGBA) dst_pixel_type = pvrtexture::PixelType(ePVRTPF_PVRTCI_4bpp_RGBA);
+    else if (compressionOptions.format == Format_PVR_4BPP_RGBA) dst_pixel_type = pvrtexture::PixelType(ePVRTPF_PVRTCI_4bpp_RGBA);*/
 
-    bool success = pvrtexture::Transcode(texture, dst_pixel_type, ePVRTVarTypeUnsignedByteNorm, color_space, pvrtexture::ePVRTCNormal, false);
+
+    auto options = PVRTexLib_TranscoderOptions();
+
+    memset(&options, 0, sizeof(PVRTexLib_TranscoderOptions));
+    options.sizeofStruct = 0x2c;
+    options.doDither = false;
+    options.colourspace = params.colourSpace;
+    options.maxRange = 1;
+
+    if (compressionOptions.format == Format_PVR_2BPP_RGB) options.pixelFormat = PVRTexLibPixelFormat::PVRTLPF_PVRTCI_2bpp_RGB;
+    else if (compressionOptions.format == Format_PVR_4BPP_RGB) options.pixelFormat = PVRTexLibPixelFormat::PVRTLPF_PVRTCI_4bpp_RGB;
+    else if (compressionOptions.format == Format_PVR_2BPP_RGBA) options.pixelFormat = PVRTexLibPixelFormat::PVRTLPF_PVRTCI_2bpp_RGBA;
+    else if (compressionOptions.format == Format_PVR_4BPP_RGBA) options.pixelFormat = PVRTexLibPixelFormat::PVRTLPF_PVRTCI_4bpp_RGBA;
+    else options.pixelFormat = PVRTexLibPixelFormat::PVRTLPF_PVRTCI_4bpp_RGBA;
+
+    options.quality = PVRTexLibCompressorQuality::PVRTLCQ_PVRTCHigh;
+    options.channelType[0] = { PVRTexLibVariableType::PVRTLVT_UnsignedByte };
+    options.channelType[1] = { PVRTexLibVariableType::PVRTLVT_UnsignedByte };
+    options.channelType[2] = { PVRTexLibVariableType::PVRTLVT_UnsignedByte };
+    options.channelType[3] = { PVRTexLibVariableType::PVRTLVT_UnsignedByte };
+    bool success = PVRTexLib_TranscodeTexture(texture, options);
+    //bool success = pvrtexture::Transcode(texture, dst_pixel_type, ePVRTVarTypeUnsignedByteNorm, color_space, pvrtexture::ePVRTCNormal, false);
 
     if (success) {
-        uint size = 0;
-        if (compressionOptions.format == Format_PVR_2BPP_RGB || compressionOptions.format == Format_PVR_2BPP_RGBA) {
-            // 2 bpp
-            const uint bpp = 2u;
-            const uint block_size = 8u * 4u;
-            const uint size_factor=(block_size*bpp)>>3u;
-            const uint block_width=max((w>>3u), 2u);
-            const uint block_height=max((h>>2u), 2u);
-            size = d * block_width * block_height * size_factor;
-        }
-        else {
-            // 4 bpp
-            const uint bpp = 4u;
-            const uint block_size = 4u * 4u;
-            const uint size_factor = (block_size*bpp) >> 3u;
-            const uint block_width = max((w>>2u), 2u);
-            const uint block_height = max((h>>2u), 2u);
-            size = d * block_width * block_height * size_factor;
-        }
+        //uint size = 0;
+        //if (compressionOptions.format == Format_PVR_2BPP_RGB || compressionOptions.format == Format_PVR_2BPP_RGBA) {
+        //    // 2 bpp
+        //    const uint bpp = 2u;
+        //    const uint block_size = 8u * 4u;
+        //    const uint size_factor=(block_size*bpp)>>3u;
+        //    const uint block_width=max((w>>3u), 2u);
+        //    const uint block_height=max((h>>2u), 2u);
+        //    size = d * block_width * block_height * size_factor;
+        //}
+        //else {
+        //    // 4 bpp
+        //    const uint bpp = 4u;
+        //    const uint block_size = 4u * 4u;
+        //    const uint size_factor = (block_size*bpp) >> 3u;
+        //    const uint block_width = max((w>>2u), 2u);
+        //    const uint block_height = max((h>>2u), 2u);
+        //    size = d * block_width * block_height * size_factor;
+        //}
+
+        auto ptr = PVRTexLib_GetTextureDataPtr(texture, 0, 0, 0, 0);
+        auto size = PVRTexLib_GetTextureDataSize(texture, 0, 0, 0);
 
         if (outputOptions.outputHandler != NULL) {
-            outputOptions.outputHandler->writeData(texture.getDataPtr(), I32(size));
+            outputOptions.outputHandler->writeData(ptr, I32(size));
         }
     }
 }
