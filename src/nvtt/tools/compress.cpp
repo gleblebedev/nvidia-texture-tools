@@ -301,11 +301,11 @@ int main(int argc, char *argv[])
         }
         else if (strcmp("-pvr_4rgb", argv[i]) == 0)
         {
-            format = nvtt::Format_PVR_2BPP_RGB;
+            format = nvtt::Format_PVR_4BPP_RGB;
         }
         else if (strcmp("-pvr_4rgba", argv[i]) == 0)
         {
-            format = nvtt::Format_PVR_2BPP_RGBA;
+            format = nvtt::Format_PVR_4BPP_RGBA;
         }
         else if (strcmp("-etc2", argv[i]) == 0 || strcmp("-etc2_rgb", argv[i]) == 0)
         {
